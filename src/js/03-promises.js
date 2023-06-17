@@ -1,8 +1,18 @@
 import Notiflix from 'notiflix';
 
+const options = {
+  position: 'right-top',
+  distance: '12px',
+  borderRadius: '25px',
+  timeout: 6000,
+  cssAnimationStyle: 'fade',
+};
+
 const refs = {
   form: document.querySelector('.form'),
-  btnEl: document.querySelector('button'),
+  delay: document.querySelector('[name="delay"]'),
+  step: document.querySelector('[name="step"]'),
+  amount: document.querySelector('[name="amount"]'),
 };
 
 refs.form.addEventListener('submit', onSubmit);
@@ -10,25 +20,27 @@ refs.form.addEventListener('submit', onSubmit);
 function onSubmit(e) {
   e.preventDefault();
 
-  let delay = Number(e.currentTarget.elements.delay.value);
-  const step = Number(e.currentTarget.elements.step.value);
-  const amount = Number(e.currentTarget.elements.amount.value);
+  const { delay, step, amount } = e.currentTarget.elements;
 
-  for (let i = 1; i <= amount; i += 1) {
-    createPromise(i, delay)
+  let inputDelayEl = Number(delay.value);
+  const inputStepEl = Number(step.value);
+  const inputAmountEl = Number(amount.value);
+
+  for (let i = 1; i <= inputAmountEl; i += 1) {
+    createPromise(i, inputDelayEl)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
+          `Fulfilled promise ${position} in ${delay}ms`,
+          options
         );
-        // console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
       .catch(({ position, delay }) => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${delay}ms`
+          ` Rejected promise ${position} in ${delay}ms`,
+          options
         );
-        // console.log(`❌ Rejected promise ${position} in ${delay}ms`);
       });
-    delay += step;
+    inputDelayEl += inputStepEl;
   }
 }
 
