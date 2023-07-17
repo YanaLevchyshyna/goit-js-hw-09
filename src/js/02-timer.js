@@ -35,8 +35,9 @@ const options = {
     const selectedDate = document.getElementById('datetime-picker').value;
     const targetDate = new Date(selectedDate).getTime();
 
+    refs.btnStart.disabled = true;
+
     this.intervalId = setInterval(() => {
-      refs.btnStart.disabled = true;
       const currentDate = Date.now();
       const remainingTime = targetDate - currentDate;
       const time = convertMs(remainingTime);
